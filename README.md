@@ -100,6 +100,7 @@ Unlike **combinational circuits** (which respond immediately to inputs), **seque
 ### Clock as an Input
 
 The clock signal can be passed directly as an input to a module. The circuit then only updates or evaluates its logic **when the clock is HIGH (1)**:
+![Clock input Diagram](/ClockInputDiagram.png)
 
 ### Edge-Triggered Design
 
@@ -145,6 +146,7 @@ Rising        Falling
 - **`f`** = `1 / T`
 - **Duty Cycle** = `t_high / T × 100%`
 
+![ClockDiagram](/ClockSignalDiagram.png)
 ---
 
 ## Summary Table
