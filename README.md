@@ -221,6 +221,8 @@ Inputs ──►  Combinational   ├───────►  Memory Element   
                               Clock Pulse
 ```
 
+![Clock Trigger Diagram](/ClockTriggeringDiagram.png)
+
 The **clock pulse** acts as the control input to the memory element, determining when it reads and stores new data.
 
 ---
