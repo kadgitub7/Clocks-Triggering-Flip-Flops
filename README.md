@@ -335,3 +335,139 @@ _______|   |_______|   |_______
 ---
 
 > **Next Steps:** Explore specific flip-flop types (SR, D, JK, T) and how each responds to rising and falling edge triggers.
+
+# Latch vs Flip-Flop: Differences and Triggering
+
+> Understanding how latches and flip-flops differ in structure and when each one responds to its control input.
+
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Shared Structure](#shared-structure)
+- [What Makes Them Different?](#what-makes-them-different)
+- [Latch — Level Triggering](#latch--level-triggering)
+- [Flip-Flop — Edge Triggering](#flip-flop--edge-triggering)
+- [Comparison Table](#comparison-table)
+- [Key Takeaways](#key-takeaways)
+
+---
+
+## Overview
+
+Both latches and flip-flops are **memory elements** used in sequential digital circuits. They store a single bit of state and feed it back into the combinational logic of a circuit. Despite their similar purpose, the key distinction lies in **when** they update their stored value — which is controlled by a shared middle input connected to both NAND gates in the circuit.
+
+---
+
+## Shared Structure
+
+A latch and a flip-flop share the same fundamental circuit structure. At the core, both use **two NAND gates** with a shared middle control input. This middle input is the single structural element that defines whether the circuit behaves as a latch or a flip-flop.
+
+```
+         ┌─────────────┐
+  S ────►│             │
+         │  NAND Gate  ├──────► Q
+  ──────►│             │
+         └─────────────┘
+              ▲
+         [Middle Input]       ← This determines Latch vs Flip-Flop
+              ▼
+         ┌─────────────┐
+  ──────►│             │
+         │  NAND Gate  ├──────► Q'
+  R ────►│             │
+         └─────────────┘
+```
+
+> The middle input, shared between both NAND gates, is either an **Enable** signal (latch) or a **Clock** signal (flip-flop).
+
+---
+
+## Latch — Level Triggering
+
+When the middle input is an **Enable** signal, the circuit operates as a **latch**. Latches use **level triggering**, meaning the circuit is active and transparent for as long as the enable signal is in a particular state.
+
+### How it works
+
+- The latch is **activated when the Enable signal is LOW (0)**.
+- While the enable is LOW, the latch continuously accepts and reflects new input data — it is said to be **transparent**.
+- When the enable returns HIGH, the latch **holds** its last captured value.
+
+```
+Enable:   ‾‾‾‾‾‾|___________|‾‾‾‾‾‾
+                 ← ACTIVE  →
+                 (Latch is transparent; data flows through)
+```
+
+> **Risk:** Because the latch remains open for the entire active phase, any change in input data during that window is immediately reflected in the output. This can lead to unintended state changes — known as a **transparency hazard**.
+
+---
+
+## Flip-Flop — Edge Triggering
+
+When the middle input is replaced by a **Clock** signal, the circuit becomes a **flip-flop**. Flip-flops use **edge triggering**, meaning they only respond at the precise instant the clock transitions between states.
+
+### How it works
+
+- The flip-flop captures input data at a specific **clock edge** — either rising or falling.
+- Outside of that brief transition moment, the flip-flop **ignores** any changes to the input.
+- This provides far more precise and predictable control over when state updates occur.
+
+#### Rising Edge (Positive Edge)
+
+The flip-flop shifts at the **LOW → HIGH** transition of the clock.
+
+```
+        ___         ___
+       |   |       |   |
+_______|   |_______|   |_______
+
+       ↑               ↑
+  Data captured     Data captured
+  (rising edge)     (rising edge)
+```
+
+#### Falling Edge (Negative Edge)
+
+The flip-flop shifts at the **HIGH → LOW** transition of the clock.
+
+```
+        ___         ___
+       |   |       |   |
+_______|   |_______|   |_______
+
+           ↓               ↓
+      Data captured     Data captured
+      (falling edge)    (falling edge)
+```
+
+> **Why this is preferred:** Edge triggering activates at a single, instantaneous moment rather than over an entire phase. This makes flip-flops far less susceptible to timing errors and glitches, and is the dominant design choice in modern sequential circuits.
+
+---
+
+## Comparison Table
+
+| Property              | Latch                              | Flip-Flop                            |
+|-----------------------|------------------------------------|--------------------------------------|
+| **Middle input**      | Enable signal                      | Clock signal                         |
+| **Triggering method** | Level triggering                   | Edge triggering                      |
+| **Active when**       | Enable is LOW                      | Clock transitions (rising or falling)|
+| **Active duration**   | Entire LOW phase of Enable         | Instantaneous (at edge only)         |
+| **Transparency**      | Transparent while Enable is LOW    | Not transparent — captures at edge   |
+| **Risk**              | Transparency hazard                | Low — precise activation             |
+| **Common use**        | Simpler or asynchronous designs    | Modern synchronous digital systems   |
+
+---
+
+## Key Takeaways
+
+- Latches and flip-flops share the **same NAND gate structure** — the middle shared input is what sets them apart.
+- A **latch** uses an **Enable** signal and is **level-triggered**: active while the enable is LOW, transparent throughout that window.
+- A **flip-flop** uses a **Clock** signal and is **edge-triggered**: it captures data only at the moment of a clock transition (rising or falling edge).
+- Edge triggering makes flip-flops **more precise and reliable** than latches in synchronous designs.
+- Modern digital systems overwhelmingly prefer **flip-flops** due to their immunity to transparency hazards and their compatibility with clocked, synchronous design methodologies.
+
+---
+
+> **Next Steps:** Explore specific flip-flop types — SR, D, JK, and T — and how each one responds to clock edges in a sequential circuit.
