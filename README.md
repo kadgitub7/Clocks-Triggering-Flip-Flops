@@ -379,6 +379,7 @@ A latch and a flip-flop share the same fundamental circuit structure. At the cor
   R ────►│             │
          └─────────────┘
 ```
+![Middle Input Diagram](/LatchCircuitDiagram.png)
 
 > The middle input, shared between both NAND gates, is either an **Enable** signal (latch) or a **Clock** signal (flip-flop).
 
