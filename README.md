@@ -472,3 +472,116 @@ _______|   |_______|   |_______
 ---
 
 > **Next Steps:** Explore specific flip-flop types — SR, D, JK, and T — and how each one responds to clock edges in a sequential circuit.
+
+# Introduction to SR Flip-Flop
+
+> A foundational memory element in sequential logic — understanding how the SR flip-flop stores and controls state using a clock signal.
+
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Circuit Diagram](#circuit-diagram)
+- [Relationship to the SR NAND Latch](#relationship-to-the-sr-nand-latch)
+- [Internal Signal Derivation](#internal-signal-derivation)
+- [Truth Tables](#truth-tables)
+  - [SR NAND Latch Truth Table](#sr-nand-latch-truth-table)
+  - [SR Flip-Flop Truth Table](#sr-flip-flop-truth-table)
+- [Key Takeaways](#key-takeaways)
+
+---
+
+## Overview
+
+The **SR Flip-Flop** is a clocked memory element built upon the SR NAND latch. Like all flip-flops, it is **edge-triggered** — it captures and stores state only at a specific transition of the clock signal, rather than remaining continuously transparent like a latch.
+
+The SR flip-flop introduces a **clock input (Clk)** that gates the S and R signals before they reach the underlying NAND latch structure. This ensures that state changes only occur when the clock is active, making the circuit suitable for use in synchronous digital systems.
+
+---
+
+## Circuit Diagram
+
+![SR Flip-Flop Diagram](#)
+
+> The SR flip-flop circuit extends the SR NAND latch by adding two input NAND gates — one for S and one for R — both controlled by the clock signal.
+
+---
+
+## Relationship to the SR NAND Latch
+
+The internal storage component of the SR flip-flop is **identical in structure to the SR NAND latch**. The key difference is that the flip-flop wraps the latch with clock-gating logic, so the latch only sees new data at the appropriate clock moment.
+
+| Property              | SR NAND Latch              | SR Flip-Flop                       |
+|-----------------------|----------------------------|------------------------------------|
+| **Middle input**      | Enable signal              | Clock signal                       |
+| **Triggering method** | Level triggering           | Edge triggering                    |
+| **Active when**       | Enable is LOW              | Clock transitions (rising/falling) |
+| **Transparency risk** | Yes                        | No                                 |
+| **Core structure**    | Two cross-coupled NANDs    | Same — plus clock-gating NANDs     |
+
+---
+
+## Internal Signal Derivation
+
+The SR flip-flop generates two intermediate signals — **S\*** and **R\*** — by ANDing each input with the clock, then inverting (i.e., a NAND operation):
+
+```
+S* = (S & Clk)' = S' + Clk'
+R* = (R & Clk)' = R' + Clk'
+```
+
+These intermediate signals are fed directly into the SR NAND latch. When `Clk = 0`, both S\* and R\* are forced HIGH regardless of S and R, which holds the latch in its **memory state**. When `Clk = 1`, the values of S and R propagate through and control the latch normally.
+
+---
+
+## Truth Tables
+
+### SR NAND Latch Truth Table
+
+This is the truth table for the underlying SR NAND latch, driven by S\* and R\*:
+
+| S\* | R\* | Q        | Q'       |
+|-----|-----|----------|----------|
+| 0   | 0   | Not used | Not used |
+| 0   | 1   | 1        | 0        |
+| 1   | 0   | 0        | 1        |
+| 1   | 1   | Memory   | Memory   |
+
+> **Note:** The `S* = 0, R* = 0` condition is **forbidden** — it drives both Q and Q' HIGH simultaneously, violating the complementary output requirement.
+
+---
+
+### SR Flip-Flop Truth Table
+
+By substituting the derived expressions for S\* and R\* back through the latch truth table, the full behaviour of the SR flip-flop (in terms of Clk, S, and R) is:
+
+| Clk | S | R | Q        | Q'       |
+|-----|---|---|----------|----------|
+| 0   | X | X | Memory   | Memory   |
+| 1   | 0 | 0 | Memory   | Memory   |
+| 1   | 0 | 1 | 0        | 1        |
+| 1   | 1 | 0 | 1        | 0        |
+| 1   | 1 | 1 | Not used | Not used |
+
+**Behaviour summary:**
+- `Clk = 0` — The flip-flop is **inactive**; inputs S and R are ignored (X = don't care) and the previous output is held.
+- `Clk = 1, S = 0, R = 0` — **No change**; the flip-flop retains its current state.
+- `Clk = 1, S = 0, R = 1` — **Reset**; Q is driven LOW.
+- `Clk = 1, S = 1, R = 0` — **Set**; Q is driven HIGH.
+- `Clk = 1, S = 1, R = 1` — **Forbidden**; this state is not used.
+
+---
+
+## Key Takeaways
+
+- The SR flip-flop is built on the **same NAND gate structure** as the SR NAND latch, extended with clock-gating inputs.
+- A **clock input** controls when S and R are allowed to affect the output, replacing the direct enable of a latch.
+- When `Clk = 0`, the flip-flop **holds its state** regardless of S and R.
+- When `Clk = 1`, the flip-flop **behaves like the SR NAND latch** — Set, Reset, Memory, or forbidden.
+- The `S = 1, R = 1` condition remains **forbidden**, as it produces an undefined output state.
+- The use of a clock signal makes the SR flip-flop suitable for **synchronous sequential circuit design**.
+
+---
+
+> **Next Steps:** Explore the **D Flip-Flop**, which eliminates the forbidden state by tying R to the complement of S, simplifying the SR flip-flop into a single-input memory element.
