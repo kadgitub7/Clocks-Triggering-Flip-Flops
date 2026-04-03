@@ -502,7 +502,7 @@ The SR flip-flop introduces a **clock input (Clk)** that gates the S and R signa
 
 ## Circuit Diagram
 
-![SR Flip-Flop Diagram](#)
+![SR Flip Flop Diagram](/SRFlipFlopDiagram.png)
 
 > The SR flip-flop circuit extends the SR NAND latch by adding two input NAND gates — one for S and one for R — both controlled by the clock signal.
 
