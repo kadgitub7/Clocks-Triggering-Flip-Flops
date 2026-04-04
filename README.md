@@ -585,3 +585,142 @@ By substituting the derived expressions for S\* and R\* back through the latch t
 ---
 
 > **Next Steps:** Explore the **D Flip-Flop**, which eliminates the forbidden state by tying R to the complement of S, simplifying the SR flip-flop into a single-input memory element.
+
+# SR Flip-Flop: Truth Table, Characteristic Table & Excitation Table
+
+> A complete reference for the SR Flip-Flop covering all three standard representations used in sequential logic analysis and design.
+
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Truth Table](#truth-table)
+- [Characteristic Table](#characteristic-table)
+- [Excitation Table](#excitation-table)
+- [Karnaugh Map (K-Map)](#karnaugh-map-k-map)
+- [Key Takeaways](#key-takeaways)
+
+---
+
+## Overview
+
+The **SR Flip-Flop** is a clocked, edge-triggered memory element that stores a single bit of state. It has two inputs — **S (Set)** and **R (Reset)** — along with a **clock (Clk)** input that gates when state changes are allowed to occur.
+
+Three table formats are used to fully describe a flip-flop's behaviour:
+
+| Table Type            | Purpose                                                                 |
+|-----------------------|-------------------------------------------------------------------------|
+| **Truth Table**       | Shows the next state given all possible input combinations, including Clk |
+| **Characteristic Table** | Describes next state from current state and inputs (assumes Clk = HIGH) |
+| **Excitation Table**  | Determines what inputs are required to achieve a desired state transition |
+
+---
+
+## Truth Table
+
+The **truth table** captures the full behaviour of the SR flip-flop across all possible combinations of Clk, S, and R.
+
+- **Qn** = Present state
+- **Qn+1** = Next state
+- **X** = Don't care (input has no effect)
+
+| Clk | S | R | Qn+1    |
+|-----|---|---|---------|
+| 0   | X | X | Qn      |
+| 1   | 0 | 0 | Qn      |
+| 1   | 0 | 1 | 0       |
+| 1   | 1 | 0 | 1       |
+| 1   | 1 | 1 | Invalid |
+
+**Behaviour summary:**
+- `Clk = 0` — Flip-flop is **inactive**; S and R are ignored and the previous state is held.
+- `Clk = 1, S = 0, R = 0` — **No change**; flip-flop retains current state.
+- `Clk = 1, S = 0, R = 1` — **Reset**; Q is driven LOW.
+- `Clk = 1, S = 1, R = 0` — **Set**; Q is driven HIGH.
+- `Clk = 1, S = 1, R = 1` — **Forbidden**; produces an undefined output state.
+
+---
+
+## Characteristic Table
+
+The **characteristic table** describes what the next state will be, given the present state and inputs. It is used to analyse a flip-flop's logical behaviour and is derived from the truth table **assuming Clk is HIGH** for all cases.
+
+| Qn | S | R | Qn+1    |
+|----|---|---|---------|
+| 0  | 0 | 0 | 0       |
+| 0  | 0 | 1 | 0       |
+| 0  | 1 | 0 | 1       |
+| 0  | 1 | 1 | Invalid |
+| 1  | 0 | 0 | 1       |
+| 1  | 0 | 1 | 0       |
+| 1  | 1 | 0 | 1       |
+| 1  | 1 | 1 | Invalid |
+
+> **Note:** The `S = 1, R = 1` condition is **forbidden** regardless of present state, as it drives both Q and Q' HIGH simultaneously, violating the complementary output requirement.
+
+---
+
+## Excitation Table
+
+The **excitation table** is the inverse of the characteristic table. Instead of asking *"what is the next state given the inputs?"*, it answers *"what inputs are required to achieve a specific state transition?"*
+
+This is particularly useful in the **design phase** of sequential circuits, where a desired sequence of states is known and the required flip-flop inputs must be determined.
+
+| Qn | Qn+1 | S | R |
+|----|------|---|---|
+| 0  | 0    | 0 | X |
+| 0  | 1    | 1 | 0 |
+| 1  | 0    | 0 | 1 |
+| 1  | 1    | X | 0 |
+
+**Interpretation:**
+- **0 → 0**: S must be 0 (no set); R is a don't care since Q is already LOW.
+- **0 → 1**: S must be 1 to set the output; R must be 0 to avoid conflict.
+- **1 → 0**: R must be 1 to reset the output; S must be 0 to avoid conflict.
+- **1 → 1**: R must be 0 (no reset); S is a don't care since Q is already HIGH.
+
+---
+
+## Karnaugh Map (K-Map)
+
+Using the excitation table, a **K-Map** can be constructed to derive a simplified Boolean expression for Qn+1 in terms of S, R, and Qn.
+
+### K-Map for Qn+1
+
+| Qn \ SR | 00 | 01 | 11 | 10 |
+|---------|----|----|-----|-----|
+| **0**   | 0  | 0  | X  | 1  |
+| **1**   | 1  | 0  | X  | 1  |
+
+### Groupings
+
+Two groups can be identified from the K-Map:
+
+- **Group 1 (size 4):** Cells covering SR = `11` (don't cares) and SR = `10` for both Qn = 0 and Qn = 1 → simplifies to **S**
+- **Group 2 (size 2):** Cells covering Qn = 1 with SR = `00` and SR = `10` → simplifies to **Qn · R'**
+
+### Resulting Expression
+
+```
+Qn+1 = S + (Qn · R')
+```
+
+This is the **characteristic equation** of the SR flip-flop. It confirms:
+- Setting S forces Q HIGH.
+- Q remains HIGH if it was already HIGH and R is not asserted.
+- Asserting R drives Q LOW regardless of its current state.
+
+---
+
+## Key Takeaways
+
+- The **truth table** captures the full input/output behaviour of the SR flip-flop, including the effect of the clock.
+- The **characteristic table** (Clk assumed HIGH) describes next-state logic from current state and inputs — used for analysis.
+- The **excitation table** inverts the characteristic table to determine required inputs for a target state transition — used for design.
+- The **K-Map** derived from the excitation table yields the characteristic equation: `Qn+1 = S + (Qn · R')`.
+- The condition `S = 1, R = 1` is **always forbidden** and must be avoided in circuit design.
+
+---
+
+> **Next Steps:** Explore the **D Flip-Flop**, which eliminates the forbidden state by tying R to the complement of S, and the **JK Flip-Flop**, which resolves the forbidden state by defining `J = K = 1` as a toggle operation.
