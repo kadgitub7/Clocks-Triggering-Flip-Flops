@@ -724,3 +724,23 @@ This is the **characteristic equation** of the SR flip-flop. It confirms:
 ---
 
 > **Next Steps:** Explore the **D Flip-Flop**, which eliminates the forbidden state by tying R to the complement of S, and the **JK Flip-Flop**, which resolves the forbidden state by defining `J = K = 1` as a toggle operation.
+
+## Implementation
+
+**Waveform**
+![SR Flip Flop Waveform](/imageAssets/SRFlipFlopWaveform.png)
+
+**Output**
+```
+Time=0 | Clk=0 S=0 R=0 | Q=x Qnot=x
+Time=10000 | Clk=0 S=1 R=0 | Q=x Qnot=x
+Time=20000 | Clk=0 S=0 R=1 | Q=x Qnot=x
+Time=30000 | Clk=1 S=1 R=0 | Q=1 Qnot=0
+Time=40000 | Clk=1 S=0 R=0 | Q=1 Qnot=0
+Time=50000 | Clk=1 S=0 R=1 | Q=0 Qnot=1
+Time=60000 | Clk=1 S=0 R=0 | Q=0 Qnot=1
+Time=70000 | Clk=0 S=1 R=0 | Q=0 Qnot=1
+Time=80000 | Clk=1 S=1 R=0 | Q=1 Qnot=0
+Time=90000 | Clk=1 S=1 R=1 | Q=1 Qnot=1
+Time=100000 | Clk=0 S=0 R=0 | Q=0 Qnot=1
+```
